@@ -28,8 +28,8 @@ export class CustomEvent {
       console.error(ERROR_MUST_FUNCTION)
     } else {
       name = name.toLowerCase()
-      this.events[name] || (this.events[name] = [])
-      // this.events?.[name] ?? (this.events[name] = []) // 未支持规范 2020年11月13日
+      // this.events[name] || (this.events[name] = [])
+      this.events?.[name] ?? (this.events[name] = [])
       this.events[name].push(scope ? [fn, scope] : [fn])
     }
     return fn
@@ -51,7 +51,8 @@ export class CustomEvent {
       for (let i = 0; i < eventArr.length; i++) {
         const item = eventArr[i]
         let fn = item[0]
-        event.scope = item[1] || {} // ?? 未支持规范 2020年11月13日
+        event.scope = item[1] ?? {}
+        // event.scope = item[1] || {}
         fn(event)
         if (eventArr.length < len) {
           i--
