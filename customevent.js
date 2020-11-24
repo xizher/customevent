@@ -3,7 +3,7 @@ const ERROR_MUST_FUNCTION = 'the second argument fn is requird as function'
 
 export class CustomEvent {
   constructor() {
-    this.events = {}
+    this._events = {}
   }
 
   on(name, fn, scope) {
@@ -13,16 +13,16 @@ export class CustomEvent {
       console.error(ERROR_MUST_FUNCTION)
     } else {
       name = name.toLowerCase()
-      this.events[name] || (this.events[name] = [])
-      // this.events?.[name] ?? (this.events[name] = [])
-      this.events[name].push(scope ? [fn, scope] : [fn])
+      this._events[name] || (this._events[name] = [])
+      // this._events?.[name] ?? (this._events[name] = [])
+      this._events[name].push(scope ? [fn, scope] : [fn])
     }
     return fn
   }
 
   fire(name, data) {
     name = name.toLowerCase()
-    const eventArr = this.events[name]
+    const eventArr = this._events[name]
     if (eventArr) {
       const event = Object.assign({
         name, // 事件类型
@@ -44,7 +44,7 @@ export class CustomEvent {
 
   off(name, fn) {
     name = name.toLowerCase()
-    const eventArr = this.events[name]
+    const eventArr = this._events[name]
     if (!eventArr || eventArr.length === 0) {
       return
     }
