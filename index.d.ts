@@ -1,7 +1,7 @@
 /**
- * 自定义事件类
+ * 自定义事件管理器
  */
-export declare class CustomEvent {
+export declare class EventManager {
   /**
    * 绑定事件
    * @param name 事件名称
@@ -9,7 +9,7 @@ export declare class CustomEvent {
    * @param scope 事件处理函数上下文
    * @returns 事件处理函数
    */
-  on (name: string, fn: Function, scope?: Object): Function
+  on (name: string, fn: (events: { name: string, origin: Object }) => void, scope?: Object): Function
   /**
    * 触发事件
    * @param name 触发的事件名称
@@ -29,5 +29,5 @@ export declare class CustomEvent {
    * @param scope 事件处理函数上下文
    * @returns 事件处理函数
    */
-  one (name: string, fn?: Function, scope?: any): Function
+  once (name: string, fn?: Function, scope?: any): Function
 }

@@ -1,30 +1,31 @@
 const ERROR_MUST_STRING = 'the first argument type is requird as string'
 const ERROR_MUST_FUNCTION = 'the second argument fn is requird as function'
 
-const _events = Symbol('_events')
+export class EventManager {
 
-export class CustomEvent {
+  #events = {}
+
   constructor() {
-    this[_events] = {}
+    // ...
   }
 
-  on(name, fn, scope) {
+  on (name, fn, scope) {
     if (typeof name !== 'string') {
       console.error(ERROR_MUST_STRING)
     } else if (typeof fn !== 'function') {
       console.error(ERROR_MUST_FUNCTION)
     } else {
       name = name.toLowerCase()
-      this[_events][name] || (this[_events][name] = [])
-      // this._events?.[name] ?? (this[_events][name] = [])
-      this[_events][name].push(scope ? [fn, scope] : [fn])
+      this.#events[name] || (this.#events[name] = [])
+      // this._events?.[name] ?? (this.#events[name] = [])
+      this.#events[name].push(scope ? [fn, scope] : [fn])
     }
     return fn
   }
 
-  fire(name, data) {
+  fire (name, data) {
     name = name.toLowerCase()
-    const eventArr = this[_events][name]
+    const eventArr = this.#events[name]
     if (eventArr) {
       const event = Object.assign({
         name, // 事件类型
@@ -44,9 +45,9 @@ export class CustomEvent {
     }
   }
 
-  off(name, fn) {
+  off (name, fn) {
     name = name.toLowerCase()
-    const eventArr = this[_events][name]
+    const eventArr = this.#events[name]
     if (!eventArr || eventArr.length === 0) {
       return
     }
@@ -62,14 +63,15 @@ export class CustomEvent {
     }
   }
 
-  one(name, fn, scope) {
-    const nfn = () => {
-      this.off(name, nfn)
-      fn.apply(scope, arguments)
+  once (name, fn, scope) {
+    const _self = this
+    function nfn () {
+      _self.off(name, fn)
+      fn.apply(scope || _self, arguments)
     }
     this.on(name, nfn, scope)
     return fn
   }
 }
 
-export default CustomEvent
+export default EventManager
