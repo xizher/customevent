@@ -5,10 +5,6 @@ export class EventManager {
 
   #events = {}
 
-  constructor() {
-    // ...
-  }
-
   on (name, fn, scope) {
     if (typeof name !== 'string') {
       console.error(ERROR_MUST_STRING)
@@ -17,7 +13,7 @@ export class EventManager {
     } else {
       name = name.toLowerCase()
       this.#events[name] || (this.#events[name] = [])
-      // this._events?.[name] ?? (this.#events[name] = [])
+      // this.#events?.[name] ?? (this.#events[name] = [])
       this.#events[name].push(scope ? [fn, scope] : [fn])
     }
     return fn
